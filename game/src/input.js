@@ -1,53 +1,34 @@
-// Keyboard and pointer input. Held keys give a steering direction; one-shot presses (start or
-// restart, pause) are queued as bit flags and taken once by the loop, so a press between two
-// frames is never lost and never counted twice.
-
-export const ACTION_CONFIRM = 1;
-export const ACTION_PAUSE = 2;
-
-const LEFT = new Set(['ArrowLeft', 'KeyA']);
-const RIGHT = new Set(['ArrowRight', 'KeyD']);
-const CONFIRM = new Set(['Space', 'Enter']);
-const PAUSE = new Set(['KeyP', 'Escape']);
-
-export function createInput(target) {
-  let left = false;
-  let right = false;
-  let actions = 0;
-
-  window.addEventListener('keydown', (event) => {
-    if (LEFT.has(event.code)) left = true;
-    else if (RIGHT.has(event.code)) right = true;
-    else if (CONFIRM.has(event.code)) {
-      if (!event.repeat) actions |= ACTION_CONFIRM;
-    } else if (PAUSE.has(event.code)) {
-      if (!event.repeat) actions |= ACTION_PAUSE;
-    } else return;
-    event.preventDefault();
+export function createInput(canvas) {
+  const held = new Set(), pressed = new Set();
+  let dx = 0, dy = 0, dragging = false, enabled = false, firing = false;
+  const gameKeys = new Set(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','ShiftLeft','ShiftRight','KeyE','KeyF','KeyR','KeyP','Escape','Enter']);
+  function clear() { held.clear(); pressed.clear(); firing = false; dragging = false; dx = 0; dy = 0; }
+  window.addEventListener('keydown', e => {
+    if (!gameKeys.has(e.code)) return;
+    if (!e.repeat) pressed.add(e.code);
+    held.add(e.code); if (enabled) e.preventDefault();
   });
-  window.addEventListener('keyup', (event) => {
-    if (LEFT.has(event.code)) left = false;
-    else if (RIGHT.has(event.code)) right = false;
+  window.addEventListener('keyup', e => held.delete(e.code));
+  window.addEventListener('blur', clear);
+  canvas.addEventListener('pointerdown', e => {
+    if (!enabled) return;
+    dragging = true; if (e.button === 0) firing = true;
+    if (document.pointerLockElement !== canvas) {
+      try { const p = canvas.requestPointerLock?.(); p?.catch?.(() => {}); } catch { /* Drag-to-look is always available. */ }
+    }
   });
-  // A key released while the tab is hidden never sends keyup: let go of everything on blur.
-  window.addEventListener('blur', () => {
-    left = false;
-    right = false;
+  window.addEventListener('pointerup', () => { dragging = false; firing = false; });
+  window.addEventListener('pointermove', e => {
+    if (enabled && (document.pointerLockElement === canvas || dragging)) { dx += e.movementX || 0; dy += e.movementY || 0; }
   });
-  target.addEventListener('pointerdown', () => {
-    actions |= ACTION_CONFIRM;
-  });
-
+  canvas.addEventListener('contextmenu', e => e.preventDefault());
   return {
-    /** -1 for left, 1 for right, 0 for neither or both. */
-    direction() {
-      return (right ? 1 : 0) - (left ? 1 : 0);
-    },
-    /** The one-shot presses since the last call, as ACTION_* flags. */
-    takeActions() {
-      const taken = actions;
-      actions = 0;
-      return taken;
-    },
+    held: code => held.has(code),
+    axis: (positive, negative) => Number(positive.some(k => held.has(k))) - Number(negative.some(k => held.has(k))),
+    take(code) { const value = pressed.has(code); pressed.delete(code); return value; },
+    look() { const value = { x: dx, y: dy }; dx = 0; dy = 0; return value; },
+    fire: () => firing || held.has('KeyF'),
+    setEnabled(value) { enabled = value; clear(); if (!value && document.pointerLockElement) document.exitPointerLock?.(); },
+    endFrame() { pressed.clear(); },
   };
 }

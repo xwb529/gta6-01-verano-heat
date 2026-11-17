@@ -1,0 +1,4 @@
+# Local packaging and automated-browser artifacts
+.local-output/
+build.log
+__pycache__/

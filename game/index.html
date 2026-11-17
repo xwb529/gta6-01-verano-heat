@@ -1,19 +1,46 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Block Dodger</title>
-<style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #11141b; }
-  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
-  /* Read aloud, never shown: the status line screen readers announce. */
-  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#132c32">
+  <meta name="description" content="One city. One last job. An original, offline 3D crime adventure in Verano Bay.">
+  <title>VERANO HEAT — A Verano Bay Story</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<canvas id="game" aria-label="Block Dodger: move the paddle left and right to dodge falling blocks and catch coins"></canvas>
-<p id="status" role="status" aria-live="polite"></p>
-<script type="module" src="./src/main.js"></script>
+  <canvas id="game" aria-label="Verano Heat: third-person open-world driving adventure"></canvas>
+  <div id="vignette"></div>
+  <header id="masthead"><a class="brand" href="./index.html" aria-label="Verano Heat home">VH<span> / </span></a><span>VERANO BAY<span class="header-divider">/</span> THE COAST IS NEVER CLEAR</span><span class="edition">AN ORIGINAL OPEN WORLD <b>01</b></span></header>
+  <section id="menu" class="screen">
+    <div class="intro">
+      <div class="eyebrow"><span class="live-dot"></span> SUNSHINE. FAST CARS. BAD DECISIONS.</div>
+      <h1>VERANO<br><span>HEAT</span><i>★</i></h1>
+      <div class="title-rule"><span>A VERANO BAY STORY</span><b>26° N / 80° W</b></div>
+      <p class="intro-copy">A package at the pier. A city on your tail.<br>One last job before the sun goes down.</p>
+      <button id="start" class="primary">ENTER VERANO BAY <span>↗</span></button>
+      <button id="new-game" class="text-button" hidden>START A NEW STORY</button>
+      <p id="save-note" class="small-note">PLAY AS RIO · 4 CHAPTERS · SAVED ON THIS DEVICE</p>
+    </div>
+    <div class="postcard"><span class="postcard-number">VB—001</span><span>WELCOME TO<br><strong>the good life.</strong></span><div class="postcard-line"></div><small>PALMS UP. GUARD DOWN.</small></div>
+    <div class="menu-bottom"><span><b>W A S D</b> MOVE / DRIVE <i>·</i> <b>E</b> INTERACT <i>·</i> <b>MOUSE</b> LOOK</span><span>HEADPHONES OPTIONAL. TROUBLE GUARANTEED. <b>↗</b></span></div>
+  </section>
+  <main id="hud" hidden>
+    <div class="top-left"><div class="district-tag"><span class="live-dot"></span><span id="district">SUNSET STRIP</span><small>18:47</small></div><div class="mission-card"><div class="eyebrow" id="chapter">THE FIRST CALL</div><h2 id="mission-title">Find Dana</h2><p id="mission-text">Meet your contact by the boardwalk.</p><div class="objective-line"><span class="objective-diamond">◆</span><span id="objective-label">DANA</span><b id="distance">12 M</b></div><div id="chapters" aria-label="Story progress"><i></i><i></i><i></i><i></i></div></div></div>
+    <div class="top-right"><div id="wanted" aria-label="No wanted level">☆☆☆☆☆</div><div id="heat-state">KEEP A LOW PROFILE</div><div class="money" id="money">$250</div><div class="health-row"><span>RIO</span><div class="health-track"><div id="health"></div></div><b id="health-value">100</b></div></div>
+    <div class="map-panel"><div class="map-header"><span>VERANO BAY</span><b>N ↑</b></div><canvas id="minimap" width="420" height="420" aria-label="Minimap: gold objective, pink player, red police, cyan vehicles"></canvas><div class="map-footer"><span class="objective-diamond">◆</span> <span id="map-label">CONTACT</span><small id="mode">ON FOOT</small></div></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="dialogue"><span>DANA / SECURE LINE</span><p id="dialogue-text"></p></div>
+    <div id="prompt"></div>
+    <div id="crosshair"><i></i><i></i><i></i><i></i></div>
+    <div class="bottom-right"><div id="speed-box" hidden><b id="speed">0</b><span>KM/H</span><small id="car-name">AURORA GT</small></div><div class="controls"><span><kbd>WASD</kbd> MOVE</span><span><kbd>E</kbd> INTERACT</span><span><kbd>SHIFT</kbd> SPRINT</span><span><kbd>F / CLICK</kbd> FIRE</span><span><kbd>P</kbd> PAUSE</span></div><div class="save-status" id="save-status">● LOCAL CHECKPOINT READY</div></div>
+    <div id="damage-flash"></div>
+  </main>
+  <section id="pause" class="modal" hidden><div class="modal-card"><div class="eyebrow">TAKE A BREATHER</div><h2>City on hold.</h2><p>Your story checkpoint is saved automatically.</p><div class="control-grid"><span>WASD / arrows</span><b>Move or drive</b><span>Mouse / drag</span><b>Look around</b><span>E</span><b>Talk / enter / exit / collect</b><span>Shift / Space</span><b>Sprint / handbrake</b><span>Click / F</span><b>Shoot on foot</b><span>R</span><b>Recover last checkpoint</b><span>P / Escape</span><b>Pause / resume</b></div><button id="resume" class="primary">BACK TO THE HEAT <span>↗</span></button><button id="recover" class="text-button">RECOVER LAST CHECKPOINT</button></div></section>
+  <section id="ending" class="modal" hidden><div class="modal-card"><div class="eyebrow">FOUR JOBS. ONE CLEAN GETAWAY.</div><h2>Coast is clear.</h2><p>Dana has the car. Rio has a clean slate.<br>Verano Bay is still yours to explore.</p><div class="end-stats"><span>STORY COMPLETE</span><strong id="end-money">$4,250</strong></div><button id="free-roam" class="primary">KEEP THE NIGHT GOING <span>↗</span></button><button id="replay" class="text-button">PLAY THE STORY AGAIN</button></div></section>
+  <div id="error" class="modal" hidden><div class="modal-card"><h2>A little engine trouble.</h2><p id="error-message">This game needs a browser with WebGL enabled.</p><button class="primary" onclick="location.reload()">TRY AGAIN ↗</button></div></div>
+  <script src="./vendor/three.min.js"></script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>
