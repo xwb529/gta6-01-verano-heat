@@ -43,12 +43,12 @@ export function createVehicles(scene,world) {
     const mesh=carModel(color,sport,kind==='police'); mesh.position.set(x,.22,z); mesh.rotation.y=yaw; scene.add(mesh);
     const v={mesh,position:mesh.position,yaw,speed:0,name,sport,kind,occupied:false,hp:100,stun:0}; list.push(v); return v;
   }
-  const aurora=add(LOCATIONS.aurora.x,LOCATIONS.aurora.z,Math.PI,'#e99b80','AURORA GT',true);
+  const aurora=add(LOCATIONS.aurora.x,LOCATIONS.aurora.z,Math.PI,'#e05a2b','AURORA GT',true);
   const parked=[
-    [99,98,Math.PI,'#89b8ae','MARINA SEDAN'],[82,63,0,'#e4cb91','PALOMA COUPE'],
-    [0,99,Math.PI/2,'#779ca6','COASTLINE WAGON'],[-79,-28,0,'#c9a2a3','MISTRAL'],
-    [-142,-112,Math.PI,'#bfd0ba','MARINA SEDAN'],[19,-95,Math.PI,'#d5b67f','PALOMA COUPE'],
-    [-118,179,Math.PI/2,'#9fadb8','COASTLINE WAGON'],[80,-170,0,'#b9877f','MISTRAL'],
+    [99,98,Math.PI,'#6fb3a4','MARINA SEDAN'],[82,63,0,'#e3b959','PALOMA COUPE'],
+    [0,99,Math.PI/2,'#5d8fa8','COASTLINE WAGON'],[-79,-28,0,'#c47f83','MISTRAL'],
+    [-142,-112,Math.PI,'#9cbd8f','MARINA SEDAN'],[19,-95,Math.PI,'#d9a84e','PALOMA COUPE'],
+    [-118,179,Math.PI/2,'#7e97a8','COASTLINE WAGON'],[80,-170,0,'#c06a58','MISTRAL'],
   ];
   parked.forEach(args=>add(...args));
   function nearest(position) {

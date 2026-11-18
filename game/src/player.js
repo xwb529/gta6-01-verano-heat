@@ -1,8 +1,8 @@
 import { THREE, person, animatePerson, box, clamp, angleDelta } from './engine.js';
 import { LOCATIONS } from './world.js';
 export function createPlayer(scene,world,vehicles) {
-  const mesh=person('#e5c79a','#28545a','#ae704b');
-  box(mesh,'#d17c75',-.18,1.28,.21,.12,.58,.025);
+  const mesh=person('#e8b04b','#28545a','#ae704b');
+  box(mesh,'#d95f4b',-.18,1.28,.21,.12,.58,.025);
   const gun=box(mesh,'#253b43',-.5,1.11,.36,.14,.17,.48); gun.visible=false;
   mesh.position.set(LOCATIONS.spawn.x,.23,LOCATIONS.spawn.z); scene.add(mesh);
   let phase=0,invulnerable=0;

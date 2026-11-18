@@ -2,7 +2,7 @@ import { THREE, person, animatePerson, flatDistance } from './engine.js';
 import { ROAD_X, ROAD_Z } from './world.js';
 export function createTraffic(scene,world,vehicles) {
   const cars=[],pedestrians=[];
-  const palette=['#b5c5ad','#c49486','#e4c798','#91afb4','#bba2a1'];
+  const palette=['#6fae7d','#cf7355','#e0aa4e','#4e8fa8','#b85c70'];
   // Lane-separated rectangular circuits; stolen traffic cars leave their AI circuit.
   for(let i=0;i<10;i++) {
     const left=ROAD_X[i%3]+3.8,right=ROAD_X[Math.min(3,i%3+1)]-3.8;
