@@ -1,5 +1,9 @@
 # VERANO HEAT
 
+[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![rank](https://make.fun/badge/gta6-01/xwb529/gta6-01-verano-heat/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![reward](https://make.fun/badge/gta6-01/xwb529/gta6-01-verano-heat/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+
 An original, offline third-person open-world browser game set in **Verano Bay**. Play as Rio, meet Dana, and complete four connected jobs: collect a package at Mirage Pier, deliver it across the city under police pressure, steal the Aurora GT, and lose your tail before returning to the pier. Completing the story unlocks continued free roaming.
 
 ## Play
